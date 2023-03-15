@@ -25,6 +25,16 @@ def save_image_from_url(url, save_location):
     with open(save_location, 'wb') as handler:
         handler.write(response.content)
 
+def create_variant(image_name, last_image, i):
+    input_url = "images/{}/input.png".format(image_name)
+    cv2.imwrite(input_url, last_image)
+    variant_url = get_image_variation(input_url)
+    new_file_name = "images/{0}/{0}{1}.png".format(image_name, i)
+    save_image_from_url(variant_url, new_file_name)
+    new_image = cv2.imread(new_file_name)
+    return new_image
+
+
 def create_altered_variant(image_name, last_image, average_image, i):
     cv2.imwrite("images/{}/average.png".format(image_name), average_image)
 
@@ -42,7 +52,7 @@ def create_altered_variant(image_name, last_image, average_image, i):
     cv2.imwrite("images/{}/difference.png".format(image_name), difference)
     random_image = np.random.randint(0, 255, size=difference.shape, dtype=np.uint8)
     threshold = 5
-    if i % 10 == 0:
+    if i % 5 == 0:
         threshold = 80
 
     threshold = np.random.randint(0, threshold)
@@ -51,12 +61,8 @@ def create_altered_variant(image_name, last_image, average_image, i):
     adjusted_image_url = "images/{}/adjusted.png".format(image_name)
     cv2.imwrite(adjusted_image_url, adjusted_image)
     
-    variant_url = get_image_variation(adjusted_image_url)
-    
-    new_file_name = "images/{0}/{0}{1}.png".format(image_name, i)
-    save_image_from_url(variant_url, new_file_name)
-    new_image = cv2.imread(new_file_name)
-    
+    new_image = create_variant(image_name, adjusted_image, i)
+
     return new_image, average_image
 
 
@@ -68,8 +74,8 @@ def get_variants(image_name, n):
 
     for i in range(n):
         time.sleep(1)
-        new_image, average_image = create_altered_variant(image_name, new_image, average_image, i)
-        
+        #new_image, average_image = create_altered_variant(image_name, new_image, average_image, i)
+        new_image = create_variant(image_name, new_image, i)
 
 def convert_avi_to_mp4(avi_file_path, output_name):
     os.popen("ffmpeg -i '{input}' -ac 2 -b:v 2000k -c:a aac -c:v libx264 -b:a 160k -vprofile high -bf 0 -strict experimental -f mp4 'videos/{output}.mp4'".format(input = avi_file_path, output = output_name))
@@ -129,4 +135,4 @@ def make_video_from_template(image_name, n=100):
     make_video(image_name)
 
 if __name__ == "__main__":
-    make_video_from_template("donaldtongue", 50)
+    make_video_from_template("virus", 50)
