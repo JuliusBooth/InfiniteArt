@@ -18,10 +18,10 @@ build/
 
 .env
 
-*.png
+
 *.jpeg
 *.jpg
 *.mp4
 *.avi
 
-secrets.py
+infiniteartglitch-firebase-admin*

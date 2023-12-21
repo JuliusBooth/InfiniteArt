@@ -1,8 +1,7 @@
 import os
 import openai
 from secrets import *
-openai.organization = org
-openai.api_key = key
+
 
 from PIL import Image
 import requests

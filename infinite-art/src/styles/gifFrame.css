@@ -1,0 +1,23 @@
+.frame-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .frame-image {
+    /* Adjust these as necessary to fit your frame size */
+    width: 30%; /* This makes the frame responsive */
+  height: auto;
+  }
+  
+  .gif-image {
+    position: absolute;
+    /* Adjust width, height, top, and left to align the gif inside the frame */
+    width: 80%;
+    height: 80%;
+    top: 10%; /* Adjust based on your frame's border */
+    left: 10%;
+    object-fit: contain;
+  }
+
